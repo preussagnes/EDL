@@ -133,15 +133,15 @@ int main ()
     Filho* D = new Filho;
     //Testando so tipos.
     if (instance_is(A, tp_base))
-        cout << "A tb e uma base\n";
+        cout << "A tb é uma base\n";
     if (instance_is(A, tp_deriva1))
-        cout << "A tb er um deriva1\n";
+        cout << "A tb é um deriva1\n";
     if (instance_is(B, tp_base))
-        cout << "B tb er uma base\n";
+        cout << "B tb é uma base\n";
     if (instance_is(B, tp_deriva1))
-        cout << "B tb er uma deriva1\n";
+        cout << "B tb é uma deriva1\n";
     if (instance_is(B, tp_deriva2))
-        cout << "B tb er uma derivada2\n";
+        cout << "B tb é uma derivada2\n";
     if (!instance_is(C, tp_deriva1))
         cout << "C não é um derivada1\n";
     if (instance_is(D, tp_base) && instance_is(D, tp_filho) && instance_is(D, tp_deriva1))
@@ -173,17 +173,17 @@ namespace Rextester
             Filho D = new Filho();
 	    //Perguntando qual é o tipo da classe ?
             if(A is Base)
-                   Console.WriteLine("A é uma base");
+                Console.WriteLine("A é uma base");
             if (A is Herda1)
-                   Console.WriteLine("A é um Herda1");
+                Console.WriteLine("A é um Herda1");
             if (B is Base)
                 Console.WriteLine("B que é um" +B.GetType()  +"tb é uma base");
             if (B is Herda2)
-				Console.WriteLine("B que é um" +B.GetType()  +"tb é uma Herda2");
+		Console.WriteLine("B que é um" +B.GetType()  +"tb é uma Herda2");
             if (D is Herda1)
-				Console.WriteLine("D que é um" +B.GetType()  +"tb é uma Herda1");
+		Console.WriteLine("D que é um" +B.GetType()  +"tb é uma Herda1");
             if (D is Base)
-				Console.WriteLine("D que é um" +B.GetType()  +"tb é uma Base");
+		Console.WriteLine("D que é um" +B.GetType()  +"tb é uma Base");
         }
 	//Criando as classes e atribuindo as heranças
         public class Base{};
