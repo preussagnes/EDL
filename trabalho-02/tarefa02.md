@@ -70,8 +70,6 @@ O exemplo a seguir é de hierarquia. A primeira diferença notável é a forma d
 ```c++
 // typeid, polymorphic class
 #include <iostream>
-#include <typeinfo>
-#include <exception>
 #include <list>
 using namespace std;
 //Types.
