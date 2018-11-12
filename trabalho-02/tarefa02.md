@@ -78,7 +78,7 @@ enum types { tp_filho, tp_deriva2, tp_deriva1, tp_base};
 class Base 
 {	 	
 	public:
-		//Lista usada para guardar todos os acestrais da instancia.
+		//Lista usada para guardar todos os ancestrais da instância.
 		list<int> linhagem;
 		Base()
 		{	
