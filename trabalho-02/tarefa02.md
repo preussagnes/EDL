@@ -62,55 +62,110 @@ class HelloWorld
 
 ### Exemplo 2
 
+O exemplo a seguir é de hierarquia. A primeira diferença notável é a forma de se declamar classe, em C++ foi necessário uma lista para armazenar todos os tipos e os ancestrais e enum para enumerar os tipos de classes. Além disso, uma função boleana que irá ser acessada toda vez que for feita uma pergunta para determinar o tipo e a descendência de uma instância. Paralelamente, o equivalente em C# somente necessita a função is ( similar a instance_of em java) na consulta já saberemos sua ascendência.
+
+
 #### C++
 
 ```c++
+// typeid, polymorphic class
 #include <iostream>
+#include <typeinfo>
+#include <exception>
+#include <list>
 using namespace std;
-
-
-int main()
-	{
-	int N;
-	
-	cin >> N;
-	int Array[N];
-	
-	
-	//Impossivel fazer Array.Length, Logo a variavel N deve ser guardad a fim q se percorar o array.
-	cout << "O array tem tamnho" << N <<"\n";
-	
-	//Ou se dividir o tamanho todo do array pelo tamanho do seu tipo.
-	cout << "O array tem tamnho" << sizeof(Array)/sizeof(int) <<"\n";
-	
-	
-	return(0);
-	}
+//Types.
+enum types { tp_filho, tp_deriva2, tp_deriva1, tp_base};
+//Definição das classes e suas herancas
+class Base 
+{	 	
+	public:
+		//Lista usada para guardar todos os acestrais da instancia.
+		list<int> linhagem;
+		Base()
+		{	
+			linhagem.push_back(tp_base);
+		}
+	};
+class Deriva1 : public Base 
+{
+	public:
+		Deriva1()
+		{
+			linhagem.push_back(tp_base); 
+			linhagem.push_back(tp_deriva1);
+		}
+};
+class Deriva2 : public Base 
+{
+	public:
+		Deriva2()
+		{
+			linhagem.push_back(tp_base);
+			linhagem.push_back(tp_deriva2);
+		}
+};
+class Filho  : public Deriva1 
+{
+	public:
+		Filho()
+		{
+			linhagem.push_back(tp_base);
+			linhagem.push_back(tp_deriva1); 
+			linhagem.push_back(tp_filho);
+		}
+};
+//Função usada para testar se uma referencia é de um dado tipo	
+bool instance_is(Base* bb, int t)
+{
+	list<int>::iterator it;
+	for(it = bb->linhagem.begin(); it != bb->linhagem.end() ; it++)
+		if (*it == t)
+			return(true);
+	return(false);		
+}
+int main () 
+{
+    //Inicia todos os objetos.
+    Base* A = new Base;
+    Deriva1* B = new Deriva1;
+    Deriva2* C = new Deriva2;
+    Filho* D = new Filho;
+    return 0;
+}
 ```
 
 #### C#
 
 ```c#
-using System;
 
-public class Program
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace Rextester
 {
-	public static void Main(String [] agrs)
-	{
-		Console.WriteLine("Escreva o tamanho do array:");
-		int N = Convert.ToInt32(Console.ReadLine());
-		int[] Array = new int[N];
-		
-		Console.WriteLine("O tamanho do arry eh:");
-		Console.WriteLine(Array.Length);
-		
-	}
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+			//Inicia todos os objetos.
+            Base A = new Base();
+            Herda1 B = new Herda1();
+            Herda2 C = new Herda2();
+            Filho D = new Filho();
+        }
+		//Criando as classes e atribuindo as heranças
+        public class Base{};
+        public class Herda1: Base{};
+        public class Herda2: Base{};
+        public class Filho: Herda1{}; 
+    }
 }
 ```
 
-Nota-se duas maneiras diferentes de trabalhar com arrays. Em C# arrays já declarados são objetos/classes e são um espaço contínuo na memória. Logo, é possível saber o seu tamanho acessando o campo Length.
-Em c++ um array é apenas um alocamento de memória contínuo, logo, quando é alocado por variáveis é difícil obter o tamanho dele. No entanto, pode-se ser obtido através do conhecimento do tamanho do array em tempo de execução, mas como descobrir o tamanho de um array genérico?
-A primeira opção é guardar a variável (no exemplo, N) e a partir dessa informação será possível saber o tamanho do array, com tudo isso, pode conter falta de expressão do programador inexperiente, pois se por acaso ele usar alguma função que tenha como parâmetro esse array, ele necessitará passar essa variável como parâmetro também. Uma forma mais eficiente seria usar sizeof no identificador do array que retornará o seu comprimento multiplicado pelo tamanho do tipo do array, basta dividir pelo tamanho do tipo obtendo assim seu tamanho.
+
 
 ### Exemplo 3
 
