@@ -145,7 +145,7 @@ int main ()
     if (instance_is(D, tp_base) && instance_is(D, tp_filho) && instance_is(D, tp_deriva1))
         cout << "D é base, deriva1 e filho\n";
     return 0;
-    return 0;
+
 }
 ```
 
