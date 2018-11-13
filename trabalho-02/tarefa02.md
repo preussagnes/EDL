@@ -14,7 +14,7 @@ C# era uma linguagem inspirada principalmente em Java e C++, contudo teve outras
 
 C, C++ vs C#
 
-Algumas diferenças são que em C# ponteiros e aritmética precisam ser checadas ou seram usadas no modo inseguro (unsafe mode). Normalmente os acessos a objetos são realizados através de referências e são liberados através da coleta de lixo (garbage collector). A sintaxe para a declaração de vetores é diferente (exemplo 2).
+Algumas diferenças são que em C# ponteiros e aritmética precisam ser checadas ou seram usadas no modo inseguro (unsafe mode). Normalmente os acessos a objetos são realizados através de referências e são liberados através da coleta de lixo (garbage collector). A sintaxe para a declaração de vetores é diferente.
         C# não possui destrutores usados para deletar objetos e nem herança múltipla como em C++. O mais próximo seria a interface disposable unida com a construção using block. Também não é permitida herança múltipla, mas uma classe pode implementar várias interfaces abstratas.
 
 
