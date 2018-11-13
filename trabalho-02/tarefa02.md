@@ -196,107 +196,81 @@ namespace Rextester
 
 ### Exemplo 3
 
-#### C++
+No exemplo a seguir iremos abordar o coletor de lixo. Por mais que seja um exemplo bem simples, ele mostra que em C# existe a necessidade de chamar a função que vai executar o coletor de lixo quando há a perda de referência, enquanto java é automático. Uma consequência dessa liberdade de C# pode ser falta de desempenho ou má otimização da memória
 
-```c++
-#include <iostream>
-using namespace std;
+#### Java
 
+```java
+public class MyClass {
+    public static void main(String args[]) 
+    {
+        Class1 c1 = new Class1();    
+        Class1 c2 = new Class1();
+        
+        System.out.println(c1);
+        System.out.println(c2);
+        
+        c1 = null;
+        c2 = null;
+        
+        System.out.println(c1);
+        System.out.println(c2);
+        
+        c1 = new Class1();    
+        c2 = new Class1();
+        
+        System.out.println(c1);
+        System.out.println(c2);
+    }
+}
 
-class Pessoa
-	{
-	public:
-	
-	int idade;
-	string nome;
-	
-	
-	void Inicialisador(string n, int nu)
-		{
-		nome = n;
-		idade = nu;	
-		}
-	};
-
-	
-  
-void AlteraC(Pessoa A)
-	{
-	A.idade = 360;
-	A.nome = "JOJO";
-	}
-	
-void AlteraC(Pessoa* A)
-	{
-	A->idade = 360;
-	A->nome = "JOJO";
-	}
-
-
-int main()
-	{
-	Pessoa P; 
-	
-	P.Inicialisador("Jhonatan", 100);  
-	cout << P.idade<<" "<< P.nome<<"\n";
-	
-	AlteraC(P);
-	cout << P.idade<<" "<< P.nome<<"\n";
-	
-	AlteraC(&P);
-	cout << P.idade<<" "<< P.nome<<"\n";
-	
-	return(0);
-	}
+class Class1
+    {
+    }
 ```
 
 #### C#
 
 ```c#
 using System;
-					
-public class Program
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+public class Class1
 {
-	public static void Main(String [] agrs)
-	{
-		Pessoa A = new Pessoa(100 ,"Jhonatan");
-		Console.WriteLine(A.Idade + " " +A.Nome);
-		
-		MudaPessoa(A);
-		Console.WriteLine(A.Idade + " " +A.Nome);
-			
-	}
-	
-	public static void MudaPessoa(Pessoa Pes)
-		{
-		Pes.Idade = 360;
-		Pes.Nome = "JOJO";
-	
-		}
-		
+    public static int c = 0;
+    ~Class1()//Esta linha só é executada quando a classe é destruida
+    {
+        c++;
+    }
 }
 
+namespace Rextester
+{
 
-public class Pessoa
-	{
-	public int Idade;
-	public string Nome;
-
-	public Pessoa(int A, string N)
-		{
-		Idade = A;
-		Nome = N;
-		}
-	}
+public class Program
+{
+    public static void Main(string []agr)
+    {
+        
+            Class1 c1=new Class1();
+            c1=null;  //Costruoi e dps tira a referencia.
+            Console.WriteLine(Class1.c);
+            
+            Class1 c2 = new Class1();
+            c2 = null;  
+            Console.WriteLine(Class1.c);
+        
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        Console.WriteLine(Class1.c);//Quantas vezes o GC foi assionado
+        
+    }
+}
+}
 ```
 
-Vemos em c++ a declaração de uma classe e a manipulação de um objeto criado, porém há um pequeno detalhe que programadores inexperientes podem deixar passar que é o parâmetro por referência ou valor. 
-Note que na primeira função "AlteraC" (onde se passa um valor) caso o programador tenha a intenção de modificar o objeto,isso não ocorrerá, porque ao chamar a função com valor, se faz uma nova declaração da classe pessoa onde o argumento A não terá o mesmo endereço do valor P na main().  Qualquer mudança dentro desse escopo será feita apenas no valor copiado.
-Para contornar essa situação basta passar uma referência à esse objeto, ou seja, não será uma cópia e sim o endereço,  sendo possível alterar qualquer dado referente a esse objeto
-dentro do escopo da própria função.
-Em c# não há necessidade de se preocupar em tratamento por referência ou valor, pois todo identificador de objeto/classe sempre é uma referência. Podemos transferir um ponteiro em vez do valor.
-Os desenvolvedores normalmente optam por trabalhar com objetos usando referências. Esse método usado em C# é de grande ajuda. Todavia ocorrerão menos erros léxicos na hora de se programar, porém restringirá a maneira livre do programador se expressar.
-    
 Fonte:
 ---
 
