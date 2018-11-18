@@ -68,126 +68,389 @@ O exemplo a seguir é de hierarquia. A primeira diferença notável é a forma d
 #### C++
 
 ```c++
-// typeid, polymorphic class
 #include <iostream>
 #include <list>
 using namespace std;
-//Types.
-enum types { tp_filho, tp_deriva2, tp_deriva1, tp_base};
-//Definição das classes e suas herancas
-class Base 
-{	 	
-	public:
-		//Lista usada para guardar todos os ancestrais da instância.
-		list<int> linhagem;
-		Base()
-		{	
-			linhagem.push_back(tp_base);
-		}
-	};
-class Deriva1 : public Base 
+
+///Enumerando todos os tipos existentes no meu jogo
+enum tipo {t_tudo, t_aliado, t_inimigo, t_player, t_npc, t_zumbi, t_caveira, t_golen};
+
+///class que representa tudo que existe nesse hipotetico mundo.
+class Tudo
 {
 	public:
-		Deriva1()
-		{
-			linhagem.push_back(tp_base); 
-			linhagem.push_back(tp_deriva1);
-		}
+
+	list<int> linhagem;
+
+	Tudo()
+    {
+        linhagem.push_back(t_tudo);
+    }
 };
-class Deriva2 : public Base 
+
+//DeClarando o protopipo.
+bool instance_is(Tudo* BB, int t);
+
+///Classes Aliadas
+class Aliado : public Tudo
 {
 	public:
-		Deriva2()
-		{
-			linhagem.push_back(tp_base);
-			linhagem.push_back(tp_deriva2);
-		}
+
+	int HP; //vida do personagem.
+	int STR; //força do personagem.
+	
+	Aliado()
+    {
+        linhagem.push_back(t_aliado);
+    }
 };
-class Filho  : public Deriva1 
+
+class Player : public Aliado
 {
 	public:
-		Filho()
-		{
-			linhagem.push_back(tp_base);
-			linhagem.push_back(tp_deriva1); 
-			linhagem.push_back(tp_filho);
-		}
+
+	Player()
+	{
+		linhagem.push_back(t_player);
+		HP = 30;
+		STR = 15;
+
+	}
+	void Atack(Tudo* p);
 };
-//Função usada para testar se uma referencia é de um dado tipo	
-bool instance_is(Base* bb, int t)
+
+class NPC : public Aliado
+{
+	public:
+
+	int TIPO; /// 1 = apenas dialogo 2 = capaz de atacar
+	
+	NPC(int T)
+	{
+		linhagem.push_back(t_npc);
+		
+		TIPO = T;
+
+		if (T == 1)
+		{
+			HP = 0;
+			STR = 0;
+		}
+		else
+		{
+			HP = 30;
+			STR = 15;
+		}
+
+	}
+};
+
+///Classes Inimigas
+
+class Inimigo : public Tudo
+{
+	public:
+
+	Inimigo()
+    {
+        linhagem.push_back(t_inimigo);
+    }
+	int HP;
+};
+
+class Zumbi : public Inimigo
+{
+    public:
+    
+	Zumbi()
+	{
+		linhagem.push_back(t_zumbi);
+
+		HP = 50;
+	}
+};
+
+class Caveira : public Inimigo
+{
+    public:
+
+	Caveira()
+	{
+		linhagem.push_back(t_caveira);
+
+		HP = 45;
+	}
+};
+
+class Golen : public Inimigo
+{
+	public:
+
+	///Novo campo.
+	int DEF;
+
+	Golen()
+	{
+		linhagem.push_back(t_golen);
+
+		HP = 45;
+		DEF = 5;
+	}
+};
+
+void Player::Atack(Tudo* p)
+{
+    ///Verifica primeiro se é um inimigo
+    if (instance_is(p, t_inimigo))
+    {
+        string nomemostro;///Mostrarar o nome do msotro na tela.
+
+        ///Mudando a referencia.
+        Inimigo* c = (Inimigo*)p;
+
+        ///Caso não for um golen, não é preciso verificar a DEF
+        if (!instance_is(c ,t_golen))
+        {
+            ///Fazendo danos.
+            c->HP -= STR;
+
+            if (instance_is(c, t_zumbi))
+                nomemostro = "Zumbi";
+            else if (instance_is(c, t_caveira))
+                nomemostro = "Caveira";
+        }
+        ///Caso seja um golen é necessário usar seu campo DEF
+        else
+        {
+            ///Mudando a referencia.
+            Golen* c = (Golen*)p;
+
+
+            ///Fazendo dano.
+            c->HP -= STR -(c->DEF);
+
+            nomemostro = "Golen";
+        }
+
+        ///Escrevendo informação na tela.
+        cout << "Player atacou " << nomemostro << " que agora esta com " << c->HP<< " de HP" << endl;
+    }
+    else if(instance_is(p ,t_aliado))
+    {
+        ///Fazendo os teste
+        if (instance_is(p ,t_npc))
+        {
+            NPC* c = (NPC*)p;
+
+            ///Analizando que tipo de NPC é.
+            if (c->TIPO == 1)///Apenas aquelas q falam.
+                cout << "Que ABSURDO!!! vc esta atacando alguem desarmado" << endl;
+            else
+            {
+                cout << "Voce atacou um aliado, ele ira revidar" << endl;
+
+                HP -= c->STR;
+
+                cout << "Seu HP agora e " << HP << endl;
+            }
+        }
+        else if (instance_is(p ,t_player))
+        {
+            cout << "Oxi! voce deve ser um estudando da UERJ." << endl;
+        }
+    }
+}
+
+///Verifica o tipo da insntancia
+bool instance_is(Tudo* bb, int t)
 {
 	list<int>::iterator it;
-	for(it = bb->linhagem.begin(); it != bb->linhagem.end() ; it++)
+	for(it = bb -> linhagem.begin(); it != bb -> linhagem.end() ; it++)
 		if (*it == t)
 			return(true);
-	return(false);		
+	return(false);
 }
-int main () 
-{
-    //Inicia todos os objetos.
-    Base* A = new Base;
-    Deriva1* B = new Deriva1;
-    Deriva2* C = new Deriva2;
-    Filho* D = new Filho;
-    //Testando so tipos.
-    if (instance_is(A, tp_base))
-        cout << "A tb é uma base\n";
-    if (instance_is(A, tp_deriva1))
-        cout << "A tb é um deriva1\n";
-    if (instance_is(B, tp_base))
-        cout << "B tb é uma base\n";
-    if (instance_is(B, tp_deriva1))
-        cout << "B tb é uma deriva1\n";
-    if (instance_is(B, tp_deriva2))
-        cout << "B tb é uma derivada2\n";
-    if (!instance_is(C, tp_deriva1))
-        cout << "C não é um derivada1\n";
-    if (instance_is(D, tp_base) && instance_is(D, tp_filho) && instance_is(D, tp_deriva1))
-        cout << "D é base, deriva1 e filho\n";
-    return 0;
 
+int main()
+{
+	///Criando os aliados*/
+	Player* joaquin = new Player();
+	NPC* Mago = new NPC(2);
+    NPC* Arqueiro = new NPC(2);
+    NPC* Refen = new NPC(1);
+
+    ///Criando os inimigos.
+    Caveira* ENY1 = new Caveira();
+    Zumbi* ENY2 = new Zumbi();
+    Golen* ENY3 = new Golen();
+
+    joaquin->Atack(ENY1);
+    joaquin->Atack(ENY2);
+    joaquin->Atack(ENY3);
+    joaquin->Atack(ENY2);
+    joaquin->Atack(ENY3);
+    joaquin->Atack(Refen);
+    joaquin->Atack(Mago);
+    joaquin->Atack(joaquin);
 }
 ```
 
 #### C#
 
 ```c#
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+public class Jogo {
+	public static void Main(){
+		///Criando os aliados*/
+		Player joaquin = new Player();
+		NPC Mago = new NPC(2);
+    	NPC Refen = new NPC(1);
+    	
+		///Criando os inimigos.
+    	Caveira ENY1 = new Caveira();
+    	Zumbi ENY2 = new Zumbi();
+    	Golen ENY3 = new Golen();
+    	
+		//Brigas.
+		joaquin.Atack(ENY1);
+    	joaquin.Atack(ENY2);
+    	joaquin.Atack(ENY3);
+    	joaquin.Atack(ENY2);
+    	joaquin.Atack(ENY3);
+    	joaquin.Atack(Refen);
+    	joaquin.Atack(Mago);
+    	joaquin.Atack(joaquin);}
+}
 
-namespace Rextester
+//Pai de todas as classes
+public class Tudo {}
+
+//Pai de todos inimigos
+public class Inimigo : Tudo
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+	public int HP;//vida do personagem.
+}
+
+//Class Zumbi
+public class Zumbi : Inimigo
+{
+	public Zumbi()
+	{
+		HP = 50;
+	}
+}
+	
+//Class Caveira
+public class Caveira : Inimigo
+{
+	public Caveira()
+	{
+		HP = 45;
+	}
+}
+
+//Class Golen
+public class Golen : Inimigo
+{
+	//Novo campo
+	public int DEF;
+	
+	public Golen()
+	{
+		HP = 45;
+		DEF = 5;
+	}
+}
+
+//Pai de todos  os aliados
+public class Aliado : Tudo
+{
+	public int HP; //vida do personagem.
+	public int STR; //ataque do personagem.
+}
+
+//Class NPC
+public class NPC : Aliado
+{
+	//Tipo de NPC 1 = Apenas para dialogo, 2 = Tb combate
+	public int TIPO;
+
+	public NPC(int npc_tipe)
+	{
+		//Arrumando o tipo.
+		TIPO = npc_tipe;
+		
+		if (TIPO == 1)
+		{
+			HP = 0;
+			STR = 0;
+		}
+		else
+		{
+			HP = 30;
+			STR = 15;
+		}
+	}
+}
+
+	
+//Class player.
+public class Player : Aliado
+{
+	public Player()
+	{
+		HP = 30;
+		STR = 15;
+	}
+	public void Atack(Tudo p)
+	{
+		///Verifica primeiro se é um inimigo
+    	if (p is Inimigo) 
         {
-	    //Inicia todos os objetos.
-            Base A = new Base();
-            Herda1 B = new Herda1();
-            Herda2 C = new Herda2();
-            Filho D = new Filho();
-	    //Perguntando qual é o tipo da classe ?
-            if(A is Base)
-                Console.WriteLine("A é uma base");
-            if (A is Herda1)
-                Console.WriteLine("A é um Herda1");
-            if (B is Base)
-                Console.WriteLine("B que é um" +B.GetType()  +"tb é uma base");
-            if (B is Herda2)
-		Console.WriteLine("B que é um" +B.GetType()  +"tb é uma Herda2");
-            if (D is Herda1)
-		Console.WriteLine("D que é um" +B.GetType()  +"tb é uma Herda1");
-            if (D is Base)
-		Console.WriteLine("D que é um" +B.GetType()  +"tb é uma Base");
-        }
-	//Criando as classes e atribuindo as heranças
-        public class Base{};
-        public class Herda1: Base{};
-        public class Herda2: Base{};
-        public class Filho: Herda1{}; 
+            ///Mudando a referencia.
+			Inimigo c = (Inimigo)p;
+
+			///Caso não for um golen, não é preciso verificar a DEF
+			if (!(p is Golen))
+			{
+				///Fazendo danos.
+				c.HP -= STR;
+			}
+			///Caso seja um golen é necessário usar seu campo DEF
+			else
+			{
+				///Mudando a referencia.
+				Golen g = (Golen)p;
+				
+				///Fazendo dano.
+				g.HP -= STR - (g.DEF);
+			}
+
+			///Escrevendo informação na tela.
+			Console.WriteLine("Player atacou " + p.GetType().Name + " que agora esta com " +c.HP +" de HP");
+	    }
+        else if(p is Aliado) //Não esquecer to Tudo
+        {
+            ///Fazendo os teste
+            if (p is NPC)
+            {
+                NPC c = (NPC)p;
+
+                ///Analizando que tipo de NPC é.
+                if (c.TIPO == 1)///Apenas aquelas q falam.
+                    Console.WriteLine("Que ABSURDO!!! vc esta atacando alguem desarmado");
+                else
+                {
+                    Console.WriteLine("Voce atacou um aliado, ele ira revidar");
+                    HP -= c.STR;
+				    Console.WriteLine("Seu HP agora e " + HP);
+                }
+            }
+            else if ( p is Player)     //Não esquecer to Tudo
+            {
+                Console.WriteLine("Oxi! voce deve ser um estudando da UERJ");
+		    }
+	    }
     }
 }
 ```
