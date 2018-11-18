@@ -11,13 +11,6 @@ C# era uma linguagem inspirada principalmente em Java e C++, contudo teve outras
 
 
 # Comparação 
-
-C, C++ vs C#
-
-Algumas diferenças são que em C# ponteiros e aritmética precisam ser checadas ou seram usadas no modo inseguro (unsafe mode). Normalmente os acessos a objetos são realizados através de referências e são liberados através da coleta de lixo (garbage collector). A sintaxe para a declaração de vetores é diferente.
-        C# não possui destrutores usados para deletar objetos e nem herança múltipla como em C++. O mais próximo seria a interface disposable unida com a construção using block. Também não é permitida herança múltipla, mas uma classe pode implementar várias interfaces abstratas.
-
-
 ### Exemplo 1
 
 Podemos observar que a sintáxe de C#  se assemelha a Java.
@@ -62,7 +55,7 @@ class HelloWorld
 
 ### Exemplo 2
 
-O exemplo a seguir é de hierarquia. A primeira diferença notável é a forma de se declamar classe, em C++ foi necessário uma lista para armazenar todos os tipos e os ancestrais e enum para enumerar os tipos de classes. Além disso, uma função boleana que irá ser acessada toda vez que for feita uma pergunta para determinar o tipo e a descendência de uma instância. Paralelamente, o equivalente em C# somente necessita a função is ( similar a instance_of em java) na consulta já saberemos sua ascendência.
+Neste exemplo iremos comparar hierarquia usando um exemplo de um jogo simples. temos 3 inimigos e 3 aliados, incluindo o jogador. O Jogador irá atacar todos os personagens e utilizamos hierarquia para saber qual tipo de personagem que foi atacado. Em C# usamos o comando is, que irá dizer se uma instância é filha ou o próprio tipo. No entanto, em C++ foi necessário uma lista para armazenar todos os tipos e os ancestrais e enum para enumerar os tipos de classes. Além disso, uma função boleana que irá ser acessada toda vez que for feita uma pergunta para determinar o tipo e a descendência de uma instância.
 
 
 #### C++
