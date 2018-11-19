@@ -454,78 +454,10 @@ public class Player : Aliado
 
 No exemplo a seguir iremos abordar o coletor de lixo. Por mais que seja um exemplo bem simples, ele mostra que em C# existe a necessidade de chamar a função que vai executar o coletor de lixo quando há a perda de referência, enquanto java é automático. Uma consequência dessa liberdade de C# pode ser falta de desempenho ou má otimização da memória
 
-#### Java
+![Code](https://i-msdn.sec.s-msft.com/dynimg/IC612215.png)
+Format: ![Alt Text](url)
 
-```java
-public class MyClass {
-    public static void main(String args[]) 
-    {
-        Class1 c1 = new Class1();    
-        Class1 c2 = new Class1();
-        
-        System.out.println(c1);
-        System.out.println(c2);
-        
-        c1 = null;
-        c2 = null;
-        
-        System.out.println(c1);
-        System.out.println(c2);
-        
-        c1 = new Class1();    
-        c2 = new Class1();
-        
-        System.out.println(c1);
-        System.out.println(c2);
-    }
-}
 
-class Class1
-    {
-    }
-```
-
-#### C#
-
-```c#
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-public class Class1
-{
-    public static int c = 0;
-    ~Class1()//Esta linha só é executada quando a classe é destruida
-    {
-        c++;
-    }
-}
-
-namespace Rextester
-{
-
-public class Program
-{
-    public static void Main(string []agr)
-    {
-        
-            Class1 c1=new Class1();
-            c1=null;  //Costruoi e dps tira a referencia.
-            Console.WriteLine(Class1.c);
-            
-            Class1 c2 = new Class1();
-            c2 = null;  
-            Console.WriteLine(Class1.c);
-        
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        Console.WriteLine(Class1.c);//Quantas vezes o GC foi assionado
-        
-    }
-}
-}
-```
 
 Fonte:
 ---
