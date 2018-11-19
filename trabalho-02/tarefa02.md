@@ -11,6 +11,7 @@ C# era uma linguagem inspirada principalmente em Java e C++, contudo teve outras
 
 
 # Comparação 
+
 ### Exemplo 1
 
 Podemos observar que a sintáxe de C#  se assemelha a Java.
@@ -26,7 +27,6 @@ public class HelloWorld
     }
 }
 ```
-
 
 #### C 
 
@@ -52,11 +52,9 @@ class HelloWorld
 }
 ```
 
-
 ### Exemplo 2
 
 Neste exemplo iremos comparar hierarquia usando um exemplo de um jogo simples. temos 3 inimigos e 3 aliados, incluindo o jogador. O Jogador irá atacar todos os personagens e utilizamos hierarquia para saber qual tipo de personagem que foi atacado. Em C# usamos o comando is, que irá dizer se uma instância é filha ou o próprio tipo. No entanto, em C++ foi necessário uma lista para armazenar todos os tipos e os ancestrais e enum para enumerar os tipos de classes. Além disso, uma função boleana que irá ser acessada toda vez que for feita uma pergunta para determinar o tipo e a descendência de uma instância.
-
 
 #### C++
 
@@ -448,40 +446,34 @@ public class Player : Aliado
 }
 ```
 
+### Assincronia
 
+É uma ferramenta em C# que possibilita uma melhora no desempenho e aprimorar resposta de um aplicativo. Ele funciona de forma que quando um processo é bloqueado o aplicativo todo não para, somente a parte que depende desse processo.Por exemplo, quando um aplicativo acessa um recurso da Web que pode ser lento, se ele for bloqueado dentro de um processo síncrono todo o aplicativo deve esperar. Porém, se for assíncrono, o aplicativo pode prosseguir trabalhando em outra atividade que não depende da desse recurso da Web até o bloqueio terminar.
 
 ### Exemplo 3
 
-No exemplo a seguir iremos abordar o coletor de lixo. Por mais que seja um exemplo bem simples, ele mostra que em C# existe a necessidade de chamar a função que vai executar o coletor de lixo quando há a perda de referência, enquanto java é automático. Uma consequência dessa liberdade de C# pode ser falta de desempenho ou má otimização da memória
+AccessTheWebAsync, um método assíncrono, cria uma instância de HttpClient e chama o método assíncrono GetStringAsync para baixar o conteúdo de um site como uma cadeia de caracteres.
+Caso ocorra um evento inesperado GetStringAsync é suspenso e para evitar o bloqueio de recursos, transfere o controle para seu chamador, AccessTheWebAsyn que continuará com outros trabalhos não dependente dele (DoIndependentWork).
+Quando GetStringAsync completar e produzir um resultado de cadeia de caracteres. O resultado é armazenado na tarefa que representa a conclusão do método, getStringTask. O operador await recupera o resultado de getStringTask e retornado a urlContents.
+Quando AccessTheWebAsync tem o resultado da cadeia de caracteres, o método pode finalmente calcular o comprimento da cadeia de caracteres e o manipulador de eventos de espera poderá retomar.
+
+#### C#
 
 ![Code](https://i-msdn.sec.s-msft.com/dynimg/IC612215.png)
 Format: ![Alt Text](url)
 
-
-
 Fonte:
 ---
-
-https://www.programacaoprogressiva.net/2012/08/comece-programar-linguagem-de_31.html 
-
-https://docs.microsoft.com/pt-br/dotnet/csharp/whats-new/csharp-version-history 
-
+https://www.programacaoprogressiva.net/2012/08/comece-programar-linguagem-de_31.html
+https://docs.microsoft.com/pt-br/dotnet/csharp/whats-new/csharp-version-history
 https://pt.wikipedia.org/wiki/C_Sharp#Implementa%C3%A7%C3%B5es
-
 https://en.wikipedia.org/wiki/C_Sharp_(programming_language)
-
 https://pt.stackoverflow.com/questions/190463/o-que-%C3%A9-estilo-de-tipagem
-
 https://pt.stackoverflow.com/questions/125588/c-%C3%A9-uma-linguagem-compilada-ou-interpretada
-
 https://pt.wikipedia.org/wiki/Microsoft_.NET
-
-https://pt.stackoverflow.com/questions/125588/c-%C3%A9-uma-linguagem-compilada-ou-interpretada
-
 http://www.guj.com.br/t/qual-a-diferenca-entre-c-c-c/331885
-
 https://www.cprogramming.com/tutorial/constructor_destructor_ordering.html
-
 https://www.oficinadanet.com.br/artigo/526/c_sharp_csharp_o_que_e_esta_linguagem
-
 https://www.upwork.com/hiring/development/c-sharp-vs-c-plus-plus/
+https://msdn.microsoft.com/pt-br/library/hh191443(v=vs.120).aspx
+https://pt.stackoverflow.com/questions/21508/qual-a-diferen%C3%A7a-entre-uma-linguagem-de-programa%C3%A7%C3%A3o-est%C3%A1tica-e-din%C3%A2mica
